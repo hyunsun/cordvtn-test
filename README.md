@@ -1,10 +1,8 @@
-### Setup environment
+### Prerequisite
 ![](https://66.media.tumblr.com/13cb8292cbffe48e2a9cf7cd0585f8af/tumblr_o8ongaffaz1s0jpjfo2_r1_540.png)
 ```
 $ vtn-setup.sh
 ```
-
-### Create virtual network and VMs
 ```
 neutron net-create net-A
 neutron subnet-create net-A 192.168.0.0/24
@@ -26,15 +24,15 @@ Created net-A-02: 23/23
 Created net-B-01: 26/29
 Created net-public-01: 37/32
 
-### 1 basic tenant network test
+**1 basic tenant network test**
 * Can ping between net-A-01 and net-A-02
 * Can’t ping between net-A-01 and net-B-01
 
-### 2 local management and public network test
+**2 local management and public network test**
 * Can ping to management IP of net-public-01 from the host compute machine
 * Can ping 8.8.8.8 from net-public-01
 
-### 3 service dependency test
+**3 service dependency test**
 Create service dependency between net-A and net-B
 ```
 curl -X POST -u onos:rocks http://$OC1:8181/onos/cordvtn/service-dependency/[net-B-UUID]/[net-A-UUID]/b
@@ -53,23 +51,23 @@ Flow counts: 33/31
 * Can’t ping between net-A-01 and net-B-01
 * Ping 192.168.0.1 from net-B-01 and the remaining net-A VM can’t get the icmp request
 
-### 4 flow rule removing test
+**4 flow rule removing test**
 * Remove all VMs
 * Check the rule count on `br-int` is 16
 
-### 5 vSG test
+**5 vSG test**
 ![](https://67.media.tumblr.com/26e09e11f90fc45d139c0561bc34ab15/tumblr_o8ongaffaz1s0jpjfo1_r1_540.png)
 ```
-                "publicGateways" : [
-                    {
-                        "gatewayIp" : "20.0.0.1",
-                        "gatewayMac" : "00:00:00:00:00:01"
-                    },
-                    {
-                        "gatewayIp" : "10.168.0.1",
-                        "gatewayMac" : "00:00:00:00:00:01"
-                    }
-                ],
+"publicGateways" : [
+    {
+        "gatewayIp" : "20.0.0.1",
+        "gatewayMac" : "00:00:00:00:00:01"
+    },
+    {
+        "gatewayIp" : "10.168.0.1",
+        "gatewayMac" : "00:00:00:00:00:01"
+    }
+],
 ```
 Add a new public gateway in the network config like above for the vSG WAN.
 
@@ -107,7 +105,7 @@ Flow count: 19/25
 * Can ping to 8.8.8.8 from `vsg-01`
 * Can ping to 10.169.0.254 from `vsg-01`
 
-## 6 Access agent test
+**6 Access agent test**
 Use the OLT device container in the previous test. Create another container for access agent and add one interface to `br-mgmt` and the other to `br-int`.
 ```
 sudo docker run --privileged --cap-add=ALL -d --name access-agent -t ubuntu:14.04 /bin/bash
@@ -118,35 +116,35 @@ sudo ./pipework br-int -i eth2 access-agent 10.168.0.100/24 00:00:00:00:02:22
 Push access agent config to ONOS.
 ```
 {
-        "devices": {
-                "of:0000000000000001": {
-                        "accessAgent": {
-                                "olts": {
-                                        "of:0000000000000011/1": "00:00:00:00:00:11",
-                                        "of:0000000000000011/2": "00:00:00:00:00:12"
-                                },
-                                "mac": "00:00:00:00:01:11",
-                                "vtn-location": "of:0000000000000001/4"
-                        }
+    "devices": {
+        "of:0000000000000001": {
+            "accessAgent": {
+                "olts": {
+                    "of:0000000000000011/1": "00:00:00:00:00:11",
+                    "of:0000000000000011/2": "00:00:00:00:00:12"
                 },
-                "of:0000000000000002": {
-                        "accessAgent": {
-                                "olts": {
-                                        "of:0000000000000022/1": "00:00:00:00:00:11",
-                                        "of:0000000000000022/2": "00:00:00:00:00:12"
-                                },
-                                "mac": "00:00:00:00:02:22",
-                                "vtn-location": "of:0000000000000002/14"
-                        }
-                }
+                "mac": "00:00:00:00:01:11",
+                "vtn-location": "of:0000000000000001/4"
+            }
+        },
+        "of:0000000000000002": {
+            "accessAgent": {
+                "olts": {
+                    "of:0000000000000022/1": "00:00:00:00:00:11",
+                    "of:0000000000000022/2": "00:00:00:00:00:12"
+                },
+                "mac": "00:00:00:00:02:22",
+                "vtn-location": "of:0000000000000002/14"
+            }
         }
+    }
 }
 ```
 * Can ping to ONOS instance with management IP address
 * Can hping to OLT device container's eth1 MAC address
 
-## 7 dynamic service VM add and remove (XOS required) test
-Run `make vtn` and `make cord`, **flow counts: 25/16**
+**7 dynamic service VM add and remove (XOS required) test**
+Run `make vtn` and `make cord`, Flow counts: 25/16
 Login to the `xos_ui` container on the XOS machine and run the following command.
 ```
 python /opt/xos/tosca/run.py padmin@vicci.org /opt/xos/tosca/samples/vtn-service-chain.yaml
