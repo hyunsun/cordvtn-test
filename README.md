@@ -20,15 +20,15 @@ nova boot --flavor 2 --image trusty-server-multi-nic --user-data passwd.data --n
 ```
 Flow counts net-A-01: 19/22, net-A-02: 23/23, net-B-01: 26/29, net-public-01: 37/32
 
-**1 basic tenant network test**
+**1 Basic tenant network test**
 * Can ping between net-A-01 and net-A-02
 * Can’t ping between net-A-01 and net-B-01
 
-**2 local management and public network test**
+**2 Local management and public network test**
 * Can ping to management IP of net-public-01 from the host compute machine
 * Can ping 8.8.8.8 from net-public-01
 
-**3 service dependency test**
+**3 Service dependency test**
 Create service dependency between net-A and net-B
 ```
 curl -X POST -u onos:rocks http://$OC1:8181/onos/cordvtn/service-dependency/[net-B-UUID]/[net-A-UUID]/b
@@ -47,13 +47,13 @@ Flow counts: 33/31
 * Can’t ping between net-A-01 and net-B-01
 * Ping 192.168.0.1 from net-B-01 and the remaining net-A VM can’t get the icmp request
 
-**4 flow rule removing test**
+**4 Flow rule removing test**
 * Remove all VMs
 * Check the rule count on `br-int` is 16
 
-### vSG
-**5 vSG test**
+### vSG test environment
 ![](https://67.media.tumblr.com/26e09e11f90fc45d139c0561bc34ab15/tumblr_o8ongaffaz1s0jpjfo1_r1_540.png)
+**5 vSG test**
 ```
 "publicGateways" : [
     {
@@ -140,7 +140,7 @@ Push access agent config to ONOS.
 * Can ping to ONOS instance with management IP address
 * Can hping to OLT device container's eth1 MAC address
 
-**7 dynamic service VM add and remove (XOS required) test**
+**7 Dynamic service VM add and remove (XOS required) test**
 Run `make vtn` and `make cord`, Flow counts: 25/16
 Login to the `xos_ui` container on the XOS machine and run the following command.
 ```
