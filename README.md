@@ -59,7 +59,6 @@ Flow counts: 33/31
 
 ### 5 vSG test
 ![](https://67.media.tumblr.com/26e09e11f90fc45d139c0561bc34ab15/tumblr_o8ongaffaz1s0jpjfo1_r1_540.png)
-Add a new public gateway in the network config for the vSG WAN.
 ```
                 "publicGateways" : [
                     {
@@ -72,6 +71,7 @@ Add a new public gateway in the network config for the vSG WAN.
                     }
                 ],
 ```
+Add a new public gateway in the network config like above for the vSG WAN.
 
 Add a container(with `vlan` package installed) which roles as an OLT device in compute node.
 ```
