@@ -58,7 +58,6 @@ Flow counts: 33/31
 * Check the rule count on `br-int` is 16
 
 ### 5 vSG test
-Overall test environment.
 ![](https://67.media.tumblr.com/26e09e11f90fc45d139c0561bc34ab15/tumblr_o8ongaffaz1s0jpjfo1_r1_540.png)
 Add a new public gateway in the network config for the vSG WAN.
 ```
