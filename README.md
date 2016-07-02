@@ -18,11 +18,7 @@ nova boot --flavor 2 --image ubuntu-14.04-server-cloudimg-amd64 --user-data pass
 nova boot --flavor 2 --image ubuntu-14.04-server-cloudimg-amd64 --user-data passwd.data --nic net-id=[net-B-UUID] net-B-01
 nova boot --flavor 2 --image trusty-server-multi-nic --user-data passwd.data --nic net-id=[net-public-UUID] --nic net-id=[net-management-UUID] net-public-01
 ```
-Flow counts
-Created net-A-01: 19/22
-Created net-A-02: 23/23
-Created net-B-01: 26/29
-Created net-public-01: 37/32
+Flow counts net-A-01: 19/22, net-A-02: 23/23, net-B-01: 26/29, net-public-01: 37/32
 
 **1 basic tenant network test**
 * Can ping between net-A-01 and net-A-02
