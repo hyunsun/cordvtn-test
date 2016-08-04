@@ -14,3 +14,4 @@ sudo ip link set address 00:00:00:00:00:01 dev eth1
 sudo ip address add 20.0.0.1/24 dev fabric
 sudo ip address add 10.168.0.1/24 dev fabric
 sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+sudo iptables -I FORWARD 1 -s 20.0.0.1 -m mac --mac-source 00:00:00:00:00:01 -m physdev --physdev-out eth1 -j DROP
