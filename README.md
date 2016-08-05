@@ -103,13 +103,6 @@ Flow count: 19/25
 * Can ping to 10.169.0.254 from `vsg-01`
 
 **6 Access agent test**
-Use the OLT device container in the previous test. Create another container for access agent and add one interface to `br-mgmt` and the other to `br-int`.
-```
-sudo docker run --privileged --cap-add=ALL -d --name access-agent -t ubuntu:14.04 /bin/bash
-sudo ./pipework br-mgmt -i eth1 access-agent 10.10.10.100/24
-sudo ./pipework br-int -i eth2 access-agent 10.168.0.100/24 00:00:00:00:02:22
-```
-
 Push access agent config to ONOS.
 ```
 {
@@ -117,28 +110,35 @@ Push access agent config to ONOS.
         "of:0000000000000001": {
             "accessAgent": {
                 "olts": {
-                    "of:0000000000000011/1": "00:00:00:00:00:11",
-                    "of:0000000000000011/2": "00:00:00:00:00:12"
+                    "of:0000000000000011/1": "fe:00:00:00:00:11"
                 },
-                "mac": "00:00:00:00:01:11",
-                "vtn-location": "of:0000000000000001/4"
-            }
-        },
-        "of:0000000000000002": {
-            "accessAgent": {
-                "olts": {
-                    "of:0000000000000022/1": "00:00:00:00:00:11",
-                    "of:0000000000000022/2": "00:00:00:00:00:12"
-                },
-                "mac": "00:00:00:00:02:22",
-                "vtn-location": "of:0000000000000002/14"
+                "mac": "fa:00:00:00:00:11",
+                "vtn-location": "of:0000000000000001/6"
             }
         }
     }
 }
 ```
-* Can ping to ONOS instance with management IP address
-* Can hping to OLT device container's eth1 MAC address
+
+Leaving the OLT container, create another one for access agent and add one interface to `br-mgmt` and the other to `br-int`.
+```
+sudo docker run --privileged --cap-add=ALL -d --name access-agent -t ubuntu:14.04 /bin/bash
+sudo ./pipework br-mgmt -i eth1 access-agent 10.10.10.100/24
+sudo ./pipework br-int -i eth2 access-agent 10.168.0.100/24 fa:00:00:00:00:11
+```
+
+OLT device and OLT agent communicates in L2 layer protocol. To test L2 layer connectivity, we're using `arping` but  Stop ONOS for test to avoid the controller takes all the ARP request.
+```
+onos-service $OC1 stop
+```
+
+In the compute node, remove arp related rules.
+```
+sudo ovs-ofctl -O OpenFlow13 del-flows br-int "arp"
+```
+
+* Can ping to ONOS instance management IP address
+* Can arping to OLT device's eth1 MAC address
 
 **7 Dynamic service VM add and remove (XOS required) test**
 Run `make vtn` and `make cord`, Flow counts: 25/16
