@@ -137,6 +137,16 @@ In the compute node, remove arp related rules.
 sudo ovs-ofctl -O OpenFlow13 del-flows br-int "arp"
 ```
 
+Attach to the access-agent container, install arping and try arping to olt container.
+```
+# apt-get update
+# apt-get install arping
+# arping 10.168.0.254
+ARPING 10.168.0.254
+42 bytes from 1a:ff:ac:f5:0c:90 (10.168.0.254): index=0 time=1.001 sec
+42 bytes from 1a:ff:ac:f5:0c:90 (10.168.0.254): index=1 time=1.001 sec
+```
+
 * Can ping to ONOS instance management IP address
 * Can arping to OLT device's eth1 MAC address
 
