@@ -2,9 +2,9 @@
 
 # Management
 sudo ovs-vsctl add-br br-mgmt
-sudo ovs-vsctl add-port br-mgmt vxlan-c1 -- set interface vxlan-c1 type=vxlan options:remote_ip=107.170.228.96 options:local_ip=45.55.25.244 options:key=100
+sudo ovs-vsctl add-port br-mgmt vxlan-c1 -- set interface vxlan-c1 type=vxlan options:remote_ip=10.1.1.106 options:local_ip=10.1.1.122 options:key=100
 sudo ip link set br-mgmt up
-sudo ip addr add 10.10.10.21/24 dev br-mgmt
+sudo ip addr add 10.10.10.11/24 dev br-mgmt
 sudo ifconfig br-mgmt mtu 1400
 sudo ip link add veth2 type veth peer name veth3
 sudo ip link set veth2 up
